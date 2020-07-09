@@ -20,13 +20,20 @@ public class ClientController {
     @Autowired
     MicroserviceProxy microserviceProxy;
 
+    private UserBean getUserSession(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        UserBean user = (UserBean) session.getAttribute("userCurrent");
+        if (user == null)
+            user = new UserBean();
+        return user;
+    }
 
     @GetMapping(name = "/")
     public String homepage(Model model, HttpServletRequest request) {
         Search search = new Search();
         model.addAttribute("search", search);
-        List<BookBean> books2 = microserviceProxy.ListBook();
-        model.addAttribute("books", books2);
+        List<BookBean> books = microserviceProxy.ListBook();
+        model.addAttribute("books", books);
         UserBean userCurrent = getUserSession(request);
         model.addAttribute("userCurrent", userCurrent);
         return "Homepage";
@@ -41,18 +48,12 @@ public class ClientController {
         return "redirect:/";
     }
 
-    @RequestMapping("/logOut")
-    public String logoutAndViewHomepage(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        session.removeAttribute("userCurrent");
-        return "redirect:/";
-    }
-
     @RequestMapping(value = "/logInCheck", method = RequestMethod.POST)
     public String viewLogInCheckPage(
             HttpServletRequest request,
             Model model,
             @ModelAttribute("user") UserBean user) {
+
         HttpSession session = request.getSession();
         UserBean userCurrent = (UserBean) session.getAttribute("userCurrent");
         if (userCurrent == null) {
@@ -72,18 +73,18 @@ public class ClientController {
 
     }
 
-    private UserBean getUserSession(HttpServletRequest request) {
+    @RequestMapping("/logOut")
+    public String logoutAndViewHomepage(HttpServletRequest request) {
         HttpSession session = request.getSession();
-        UserBean user = (UserBean) session.getAttribute("userCurrent");
-        if (user == null)
-            user = new UserBean();
-        return user;
+        session.removeAttribute("userCurrent");
+        return "redirect:/";
     }
 
     @GetMapping("book/{id}")
     public ModelAndView showBookPage(
             @PathVariable(name = "id") long id,
             HttpServletRequest request) {
+
         ModelAndView modelAndView = new ModelAndView("book");
         UserBean userCurrent = getUserSession(request);
         modelAndView.addObject("userCurrent", userCurrent);
@@ -116,6 +117,7 @@ public class ClientController {
             @ModelAttribute("search") Search search,
             Model model,
             HttpServletRequest request) {
+
         UserBean userCurrent = getUserSession(request);
         model.addAttribute("userCurrent", userCurrent);
         if (search.getName().equals("")) {

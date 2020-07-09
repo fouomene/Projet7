@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.util.List;
 
-@FeignClient(name = "microservice",url = "localhost:9001")
+@FeignClient(name = "microservice-books",url = "localhost:9001")
 public interface MicroserviceProxy {
     @GetMapping(value = "/BooksSearch/{keyword}")
     List<BookBean> findBookByKeyword(@PathVariable("keyword") String keyword);

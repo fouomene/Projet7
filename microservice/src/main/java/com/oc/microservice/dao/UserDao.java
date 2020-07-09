@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface UserDao extends JpaRepository<User,Long> {
-    @Query("SELECT user FROM User user WHERE user.username like %:username%")
+    @Query("SELECT user FROM User user WHERE user.username like :username")
     User findUserByUsername(@Param("username") String username);
 }

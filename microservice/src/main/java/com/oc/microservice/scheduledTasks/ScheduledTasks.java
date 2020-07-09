@@ -2,8 +2,6 @@ package com.oc.microservice.scheduledTasks;
 
 import com.oc.microservice.dao.LoanDao;
 import com.oc.microservice.model.Loan;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -19,8 +17,6 @@ import java.util.Properties;
 public class ScheduledTasks {
     @Autowired
     LoanDao loanDao;
-
-    private static final Logger log = LoggerFactory.getLogger(ScheduledTasks.class);
 
     @Scheduled(fixedRate = 24*60*60*1000)//24h
     public void reportNotReturnedBook(){
@@ -67,8 +63,6 @@ public class ScheduledTasks {
             message.setText(text);
 
             Transport.send(message);
-
-            System.out.println("Done");
 
         } catch (MessagingException e) {
             e.printStackTrace();

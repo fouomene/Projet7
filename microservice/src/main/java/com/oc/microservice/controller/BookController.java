@@ -4,12 +4,7 @@ import com.oc.microservice.dao.BookDao;
 import com.oc.microservice.exceptions.BookNotFoundException;
 import com.oc.microservice.model.Book;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-
-import javax.validation.Valid;
-import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,8 +14,7 @@ public class BookController {
 
     @GetMapping(value = "BooksSearch/{keyword}")
     public List<Book> findBookByKeyword(@PathVariable String keyword){
-       List<Book> bookList = bookDao.findByKeyword(keyword);
-        return bookList;
+        return  bookDao.findByKeyword(keyword);
     }
 
     @GetMapping(value = "Books/{id}")
@@ -30,8 +24,7 @@ public class BookController {
 
     @GetMapping(value = "Books")
     public List<Book> ListBook(){
-        List<Book> bookList = bookDao.findAll();
-        return bookList;
+        return bookDao.findAll();
     }
 }
 

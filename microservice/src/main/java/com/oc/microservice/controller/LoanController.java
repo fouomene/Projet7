@@ -26,14 +26,12 @@ public class LoanController {
 
     @PostMapping(value = "LoansSearch")
     public List<Loan> findLoanByUser(@RequestBody Long idUser) {
-        List<Loan> loanList = loanDao.findByUser(idUser);
-        return loanList;
+        return loanDao.findByUser(idUser);
     }
 
     @GetMapping(value = "Loans/{id}")
     public Optional<Loan> displayLoan(@PathVariable Long id) {
-        Optional<Loan> loan = loanDao.findById(id);
-        return loan;
+        return loanDao.findById(id);
     }
 
 
@@ -55,18 +53,21 @@ public class LoanController {
         return true;
     }
 
-    @RequestMapping(value = "/deleteLoan/{id}")
-    public void deleteLoan(@PathVariable(name = "id") Long id) {
-        loanDao.deleteById(id);
+    @RequestMapping(value = "/LoanReturned/{id}")
+    public void loanReturned(@PathVariable(name = "id") Long id) {
+        Optional<Loan> loan = loanDao.findById(id);
+        if(loan.isPresent()){
+            loan.get().getBook().setNbRemaining(loan.get().getBook().getNbRemaining()+1);
+            loan.get().setReturned(true);
+            loanDao.save(loan.get());
+        }
     }
-
-
 
     @GetMapping(value = "Loans")
     public List<Loan> ListLoan(){
-        List<Loan> loanList = loanDao.findAll();
-        return loanList;
+        return loanDao.findAll();
     }
+
     @PostMapping(value = "Loan/{id}")
     public void addExtension(@PathVariable Long id){
         Optional<Loan> loan= loanDao.findById(id);
