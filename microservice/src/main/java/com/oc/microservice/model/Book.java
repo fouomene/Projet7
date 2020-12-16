@@ -2,12 +2,11 @@ package com.oc.microservice.model;
 
 import org.hibernate.validator.constraints.Length;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
+@Table(name = "book")
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +19,10 @@ public class Book {
     private int nbRemaining;
     @Length(max = 500,message = "Le lien est trop grand (max : 500 caractères).")
     private String image;
+
+    // to solve issue: foreignkey mal formated while importing db
+    @OneToMany(mappedBy = "book")
+    private Set<Loan> loans;
 
     public Book() {
     }

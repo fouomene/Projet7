@@ -3,8 +3,10 @@ import com.oc.microservice.enums.Role;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
+@Table(name = "user")
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +24,10 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(length = 13)
     private Role role;
+
+    // to solve issue: 'foreignkey mal formated' while importing db
+    @OneToMany(mappedBy = "user")
+    private Set<Loan> loans;
 
     public User() {
     }
